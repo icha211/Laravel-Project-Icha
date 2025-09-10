@@ -6,10 +6,10 @@
 </head>
 <body>
     <h1>Welcome to our website!</h1>
-    <p>This is a simple Laravel Blade template.</p>
+    <p>This is a simple groceries list</p>
 
-    <a href="/ninjas" class="btn">
-    Find Ninjas!
+    <a href="/groceries" class="btn">
+    Find groceries
     </a>
 </body>
 </html>
