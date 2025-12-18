@@ -2,14 +2,13 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Groceries Network</title>
+    <title>Employee Management</title>
 </head>
 <body>
     <header>
         <nav>
             <a href="/">Home</a>
-            <a href="/groceries">Groceries</a>
-            <a href="/groceries/create">Create New Groceries</a>
+            <a href="/employees">Employees</a>
         </nav>
     </header>
 
@@ -18,7 +17,7 @@
     <main>
 
     <footer>
-        <p>&copy; 2025 Groceries Network</p>
+        <p>&copy; 2025 Employee Management</p>
     </footer>
 </body>
 </html>

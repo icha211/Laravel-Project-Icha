@@ -5,11 +5,8 @@
     <title>Document</title>
 </head>
 <body>
-    <h1>Welcome to our website!</h1>
-    <p>This is a simple groceries list</p>
-
-    <a href="/groceries" class="btn">
-    Find groceries
-    </a>
+    <h1>Welcome to Employee Performance</h1>
+    <p>Manage employees, performance reviews, goals, training, and dashboards.</p>
+    <a href="/employees" class="btn">View Employees</a>
 </body>
 </html>

@@ -1,0 +1,255 @@
+<x-app-layout>
+    <x-slot name="title">Employee Details</x-slot>
+
+    <div class="row">
+        <!-- Employee Info -->
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-body text-center">
+                    <div style="width: 100px; height: 100px; border-radius: 50%; background: linear-gradient(135deg, #2563eb, #1e40af); margin: 0 auto 1rem; display: flex; align-items: center; justify-content: center; color: white; font-size: 3rem;">
+                        <i class="fas fa-user"></i>
+                    </div>
+                    <h4>{{ $employee->user->name }}</h4>
+                    <p class="text-muted">{{ $employee->position }}</p>
+                    <hr>
+                    <div class="text-start">
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Employee ID</small>
+                            <code>{{ $employee->employee_id }}</code>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Email</small>
+                            <a href="mailto:{{ $employee->user->email }}">{{ $employee->user->email }}</a>
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Phone</small>
+                            {{ $employee->user->phone }}
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Department</small>
+                            {{ $employee->department }}
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Hire Date</small>
+                            {{ $employee->hire_date->format('M d, Y') }}
+                        </div>
+                        <div class="mb-2">
+                            <small class="text-muted d-block">Salary</small>
+                            ${{ number_format($employee->salary, 2) }}
+                        </div>
+                    </div>
+                    <hr>
+                    <a href="{{ route('employees.edit', $employee) }}" class="btn btn-primary btn-sm w-100 mb-2">
+                        <i class="fas fa-edit"></i> Edit
+                    </a>
+                    <form method="POST" action="{{ route('employees.destroy', $employee) }}">
+                        @csrf
+                        @method('DELETE')
+                        <button type="submit" class="btn btn-danger btn-sm w-100" onclick="return confirm('Are you sure?')">
+                            <i class="fas fa-trash"></i> Delete
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <!-- Performance Stats -->
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Performance</h5>
+                </div>
+                <div class="card-body">
+                    <div class="text-center mb-3">
+                        <div class="rating" style="font-size: 1.5rem;">
+                            @for($i = 1; $i <= 5; $i++)
+                                @if($i <= round($employee->average_rating))
+                                    <i class="fas fa-star"></i>
+                                @else
+                                    <i class="far fa-star"></i>
+                                @endif
+                            @endfor
+                        </div>
+                        <h3 class="my-2">{{ number_format($employee->average_rating, 2) }}/5.00</h3>
+                        <small class="text-muted">{{ $employee->total_reviews }} reviews</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Tabs Content -->
+        <div class="col-md-8">
+            <ul class="nav nav-tabs mb-3" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="reviews-tab" data-bs-toggle="tab" data-bs-target="#reviews" type="button" role="tab">
+                        <i class="fas fa-star"></i> Performance Reviews
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="goals-tab" data-bs-toggle="tab" data-bs-target="#goals" type="button" role="tab">
+                        <i class="fas fa-target"></i> Goals
+                    </button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="training-tab" data-bs-toggle="tab" data-bs-target="#training" type="button" role="tab">
+                        <i class="fas fa-graduation-cap"></i> Training
+                    </button>
+                </li>
+            </ul>
+
+            <!-- Reviews Tab -->
+            <div class="tab-content">
+                <div class="tab-pane fade show active" id="reviews" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Performance Reviews</h5>
+                            @if(auth()->user()->isEmployer())
+                                <a href="{{ route('performance-reviews.create', $employee->id) }}" class="btn btn-sm btn-primary">
+                                    <i class="fas fa-plus"></i> New Review
+                                </a>
+                            @endif
+                        </div>
+                        <div class="card-body">
+                            @forelse($employee->performanceReviews as $review)
+                                <div class="mb-3 pb-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <div>
+                                            <h6 class="mb-1">{{ $review->review_period }}</h6>
+                                            <small class="text-muted">By: {{ $review->reviewer->name }}</small>
+                                        </div>
+                                        <span class="badge bg-{{ $review->status === 'submitted' ? 'success' : ($review->status === 'draft' ? 'warning' : 'info') }}">
+                                            {{ ucfirst($review->status) }}
+                                        </span>
+                                    </div>
+                                    <div class="row text-center my-3">
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Communication</small>
+                                            <strong>{{ $review->communication }}/5</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Teamwork</small>
+                                            <strong>{{ $review->teamwork }}/5</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Productivity</small>
+                                            <strong>{{ $review->productivity }}/5</strong>
+                                        </div>
+                                        <div class="col-6">
+                                            <small class="text-muted d-block">Reliability</small>
+                                            <strong>{{ $review->reliability }}/5</strong>
+                                        </div>
+                                    </div>
+                                    @if($review->comments)
+                                        <div class="alert alert-light">
+                                            <strong>Comments:</strong>
+                                            <p class="mb-0">{{ $review->comments }}</p>
+                                        </div>
+                                    @endif
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('performance-reviews.show', $review) }}" class="btn btn-sm btn-outline-primary">View</a>
+                                        @if(auth()->user()->isEmployer())
+                                            <a href="{{ route('performance-reviews.edit', $review) }}" class="btn btn-sm btn-outline-warning">Edit</a>
+                                            <form method="POST" action="{{ route('performance-reviews.destroy', $review) }}" style="display:inline;">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Sure?')">Delete</button>
+                                            </form>
+                                        @endif
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-muted">No performance reviews yet</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Goals Tab -->
+                <div class="tab-pane fade" id="goals" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Goals</h5>
+                            <a href="{{ route('goals.create', $employee) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i> Add Goal
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            @forelse($employee->goals as $goal)
+                                <div class="mb-3 pb-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6>{{ $goal->title }}</h6>
+                                        <span class="badge bg-{{ $goal->status === 'completed' ? 'success' : ($goal->status === 'delayed' ? 'danger' : 'info') }}">
+                                            {{ ucfirst(str_replace('_', ' ', $goal->status)) }}
+                                        </span>
+                                    </div>
+                                    @if($goal->description)
+                                        <p class="text-muted mb-2">{{ $goal->description }}</p>
+                                    @endif
+                                    <div class="mb-2">
+                                        <small class="text-muted">Progress: {{ $goal->progress }}%</small>
+                                        <div class="progress" style="height: 8px;">
+                                            <div class="progress-bar" style="width: {{ $goal->progress }}%"></div>
+                                        </div>
+                                    </div>
+                                    <small class="text-muted d-block mb-2">Target: {{ $goal->target_date->format('M d, Y') }}</small>
+                                    <div class="d-flex gap-2">
+                                        <a href="{{ route('goals.edit', ['employee' => $employee->id, 'goal' => $goal->id]) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <form method="POST" action="{{ route('goals.destroy', ['employee' => $employee->id, 'goal' => $goal->id]) }}" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Sure?')">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-muted">No goals set</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Training Tab -->
+                <div class="tab-pane fade" id="training" role="tabpanel">
+                    <div class="card">
+                        <div class="card-header d-flex justify-content-between align-items-center">
+                            <h5 class="mb-0">Training Programs</h5>
+                            <a href="{{ route('training.create', $employee) }}" class="btn btn-sm btn-primary">
+                                <i class="fas fa-plus"></i> Add Training
+                            </a>
+                        </div>
+                        <div class="card-body">
+                            @forelse($employee->training as $training)
+                                <div class="mb-3 pb-3 border-bottom">
+                                    <div class="d-flex justify-content-between align-items-start mb-2">
+                                        <h6>{{ $training->title }}</h6>
+                                        <span class="badge bg-{{ $training->status === 'completed' ? 'success' : ($training->status === 'in_progress' ? 'info' : 'secondary') }}">
+                                            {{ ucfirst(str_replace('_', ' ', $training->status)) }}
+                                        </span>
+                                    </div>
+                                    @if($training->description)
+                                        <p class="text-muted mb-2">{{ $training->description }}</p>
+                                    @endif
+                                    <small class="text-muted d-block">
+                                        <i class="fas fa-calendar"></i> {{ $training->start_date->format('M d, Y') }} 
+                                        @if($training->end_date) - {{ $training->end_date->format('M d, Y') }} @endif
+                                    </small>
+                                    @if($training->certificate)
+                                        <small class="text-success d-block"><i class="fas fa-certificate"></i> {{ $training->certificate }}</small>
+                                    @endif
+                                    <div class="d-flex gap-2 mt-2">
+                                        <a href="{{ route('training.edit', ['employee' => $employee->id, 'training' => $training->id]) }}" class="btn btn-sm btn-outline-primary">Edit</a>
+                                        <form method="POST" action="{{ route('training.destroy', ['employee' => $employee->id, 'training' => $training->id]) }}" style="display:inline;">
+                                            @csrf
+                                            @method('DELETE')
+                                            <button type="submit" class="btn btn-sm btn-outline-danger" onclick="return confirm('Sure?')">Delete</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            @empty
+                                <p class="text-muted">No training programs</p>
+                            @endforelse
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</x-app-layout>
