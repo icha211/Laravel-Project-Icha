@@ -282,6 +282,8 @@
             border-radius: 12px;
             padding: 24px;
             box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+            display: flex;
+            flex-direction: column;
         }
 
         .chart-header {
@@ -289,6 +291,13 @@
             justify-content: space-between;
             align-items: center;
             margin-bottom: 20px;
+        }
+
+        /* Ensure charts have a stable, fixed height so cards don't stretch */
+        .chart-container {
+            position: relative;
+            width: 100%;
+            height: 300px; /* adjust as needed to fit your layout */
         }
 
         .chart-title {
@@ -593,7 +602,9 @@
                     <h3 class="chart-title">Attendance Overview</h3>
                     <i class="fas fa-ellipsis-v chart-menu"></i>
                 </div>
-                <canvas id="attendanceChart" height="200"></canvas>
+                <div class="chart-container">
+                    <canvas id="attendanceChart"></canvas>
+                </div>
             </div>
 
             <div class="chart-card">
@@ -634,7 +645,9 @@
                     <h3 class="chart-title">Payroll Overview</h3>
                     <i class="fas fa-ellipsis-v chart-menu"></i>
                 </div>
-                <canvas id="payrollChart" height="200"></canvas>
+                <div class="chart-container">
+                    <canvas id="payrollChart"></canvas>
+                </div>
             </div>
 
             <div class="chart-card">
