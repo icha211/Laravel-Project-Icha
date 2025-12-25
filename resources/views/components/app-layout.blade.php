@@ -119,10 +119,6 @@
                         <span>Attendance</span>
                     </a>
                     <a href="#" class="menu-item">
-                        <i class="fas fa-money-bill-wave"></i>
-                        <span>Payroll</span>
-                    </a>
-                    <a href="#" class="menu-item">
                         <i class="fas fa-user-plus"></i>
                         <span>Recruitment</span>
                     </a>

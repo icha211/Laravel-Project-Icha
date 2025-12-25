@@ -1,12 +1,20 @@
 <x-app-layout>
     <x-slot name="title">Performance Reviews</x-slot>
-
-    <div class="card">
-        <div class="card-header d-flex justify-content-between align-items-center">
-            <h5 class="mb-0">Performance Reviews</h5>
+    <x-slot name="header">
+        <div class="dashboard-header">
+            <div class="dashboard-title">
+                <h1>Performance Reviews</h1>
+                <p class="dashboard-subtitle">Track and manage employee performance ratings.</p>
+            </div>
         </div>
-        <div class="table-responsive">
-            <table class="table table-hover mb-0">
+    </x-slot>
+
+    <div class="chart-card">
+        <div class="chart-header d-flex justify-content-between align-items-center">
+            <h3 class="chart-title mb-0">Performance Reviews</h3>
+        </div>
+        <div class="table-responsive mt-3">
+            <table class="table table-hover align-middle mb-0">
                 <thead class="table-light">
                     <tr>
                         <th>Employee</th>
@@ -27,7 +35,7 @@
                             </td>
                             <td>{{ $review->review_period }}</td>
                             <td>
-                                <div class="rating">
+                                <div class="rating text-warning">
                                     @for($i = 1; $i <= 5; $i++)
                                         @if($i <= $review->rating)
                                             <i class="fas fa-star"></i>
@@ -36,7 +44,7 @@
                                         @endif
                                     @endfor
                                 </div>
-                                <br><small>{{ number_format($review->rating, 1) }}/5</small>
+                                <small class="text-muted">{{ number_format($review->rating, 1) }}/5</small>
                             </td>
                             <td>
                                 <span class="badge bg-{{ $review->status === 'submitted' ? 'success' : ($review->status === 'draft' ? 'warning' : 'info') }}">
@@ -57,7 +65,9 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="7" class="text-center text-muted py-4">No reviews yet</td>
+                            <td colspan="7" class="text-center text-muted py-4">
+                                <p class="mb-0">No reviews yet</p>
+                            </td>
                         </tr>
                     @endforelse
                 </tbody>

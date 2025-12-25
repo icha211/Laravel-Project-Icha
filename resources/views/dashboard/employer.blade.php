@@ -99,16 +99,6 @@
 
             <div class="chart-card">
                 <div class="chart-header">
-                    <h3 class="chart-title">Payroll Overview</h3>
-                    <i class="fas fa-ellipsis-v chart-menu"></i>
-                </div>
-                <div class="chart-container">
-                    <canvas id="payrollChart"></canvas>
-                </div>
-            </div>
-
-            <div class="chart-card">
-                <div class="chart-header">
                     <h3 class="chart-title">Attendance Heatmap</h3>
                     <i class="fas fa-ellipsis-v chart-menu"></i>
                 </div>
@@ -207,56 +197,6 @@
                         ticks: {
                             callback: function(value) {
                                 return value + '%';
-                            }
-                        },
-                        grid: {
-                            display: true,
-                            drawBorder: false
-                        }
-                    },
-                    x: {
-                        grid: {
-                            display: false
-                        }
-                    }
-                }
-            }
-        });
-
-        // Payroll Overview Chart
-        const payrollCtx = document.getElementById('payrollChart').getContext('2d');
-        new Chart(payrollCtx, {
-            type: 'bar',
-            data: {
-                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
-                datasets: [{
-                    label: 'Cost',
-                    data: [300, 250, 350, 280, 320, 290, 310, 380, 400, 370, 350, 390],
-                    backgroundColor: '#667eea',
-                    borderRadius: 6
-                }, {
-                    label: 'Expense',
-                    data: [200, 180, 220, 190, 210, 200, 190, 250, 240, 230, 220, 260],
-                    backgroundColor: '#c7d2fe',
-                    borderRadius: 6
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: true,
-                        position: 'top',
-                        align: 'end'
-                    }
-                },
-                scales: {
-                    y: {
-                        beginAtZero: true,
-                        ticks: {
-                            callback: function(value) {
-                                return '$' + value;
                             }
                         },
                         grid: {
